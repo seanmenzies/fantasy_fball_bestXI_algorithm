@@ -132,5 +132,5 @@ while True:
         # prints out results when total iterations hit
         if count >= 2500 and current_bestXI is not None:
             print(current_bestXI)
-            print(f'{bestXI_points} at a cost of £{current_bestXI["now_cost"].sum()}')
+            print(f'{bestXI_points} at a cost of £{current_bestXI["now_cost"].sum()} million')
             break

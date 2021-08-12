@@ -1,9 +1,9 @@
-# fantasy football bestXI algorithm
+# fantasy football best team algorithm
 
 ## Rules
 - Only two players from each premier league team
 - Transfer budget of £100 million
-- 3-4-3 formation with no subs
+- 2 gks, 5 defenders, 5 midfielders, 3 forwards
 - Data taken from 2020/2021 season
 
 ## Features

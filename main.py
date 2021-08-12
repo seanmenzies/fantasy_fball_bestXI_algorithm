@@ -14,7 +14,7 @@ key_info = elements_df[['second_name', 'total_points', 'now_cost', 'element_type
 key_info['position'] = key_info.element_type.map(element_types.set_index('id').singular_name)
 key_info['team'] = elements_df.team.map(teams_df.set_index('id').name)
 
-budget = 10000
+budget = 1000
 sorted_players = key_info.sort_values(by='total_points', ascending=False)
 goalkeepers = 0
 defenders = 0
@@ -107,27 +107,30 @@ while True:
             forwards += 1
         else:
             continue
+
     # break while loop if rules are broken so invalid teams are not checked
-    if not firstXI.empty and max(firstXI['team'].value_counts().values) > 2 or len(firstXI.index) != 15:
+    if not firstXI.empty and max(firstXI['team'].value_counts().values) > 2 or len(firstXI.index) != 15 or firstXI['now_cost'].sum() > budget:
+        # register and print progress
+        count += 1
+        if count % 100 == 0:
+            print(f'{2500 - count} iterations to go...')
         gk_count, df_count, mf_count, fw_count = switch_players(gk_count, df_count, mf_count, fw_count)
         continue
     else:
-        valid = True
+        # register and print progress
+        count += 1
+        if count % 100 == 0:
+            print(f'{2500 - count} iterations to go...')
         total_cost = firstXI['now_cost'].sum()
         total_points = firstXI['total_points'].sum()
-        valid = False if total_cost > budget else True
-        # if everything is kosher, add team to current bestXI
-        if valid and total_points > bestXI_points:
+        # if current team is the highest scoring, add team to current bestXI
+        if total_points > bestXI_points:
             current_bestXI = firstXI.copy()
             bestXI_points = current_bestXI['total_points'].sum()
-        else:
-            # count failed iterations
-            count += 1
-            print(count)
         gk_count, df_count, mf_count, fw_count = switch_players(gk_count, df_count, mf_count, fw_count)
         # set total iterations when total_points <= bestXI_points
         # prints out results when total iterations hit
-        if count >= 250 and current_bestXI is not None:
+        if count >= 2500 and current_bestXI is not None:
             print(current_bestXI)
-            print(bestXI_points)
+            print(f'{bestXI_points} at a cost of £{current_bestXI["now_cost"].sum()}')
             break
